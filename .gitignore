@@ -1,2 +1,16 @@
-# Project exclude paths
-/target/
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# wirtual machine crash logs, see http:/whs_err_pid*
+
+target
+.idea
+
+*.iml
