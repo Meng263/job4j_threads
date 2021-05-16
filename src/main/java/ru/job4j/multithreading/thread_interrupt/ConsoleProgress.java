@@ -4,18 +4,15 @@ import java.time.Duration;
 import java.util.List;
 
 public class ConsoleProgress implements Runnable {
-    List<Character> characters = List.of('|', '/', '-', '\\');
-
     @Override
     public void run() {
+        List<Character> characters = List.of('|', '/', '-', '\\');
         int charCounter = 0;
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                Character animationChar = characters.get(charCounter);
+                Character animationChar = characters.get(charCounter++);
                 if (charCounter == characters.size() - 1) {
                     charCounter = 0;
-                } else {
-                    charCounter++;
                 }
                 System.out.print("\r Loading ... " + animationChar);
                 Thread.sleep(500);
