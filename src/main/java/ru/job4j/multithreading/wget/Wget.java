@@ -4,26 +4,34 @@ import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 
 public class Wget implements Runnable {
     private final String url;
-    private final int speed;
+    private final int speedKbs;
+    private final String fileName;
 
-    public Wget(String url, int speed) {
+    public Wget(String url, int speedKbs, String fileName) {
         this.url = url;
-        this.speed = speed;
+        this.speedKbs = speedKbs;
+        this.fileName = fileName;
     }
 
     @Override
     public void run() {
-//        String file = "https://raw.githubusercontent.com/peterarsentev/course_test/master/pom.xml";
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream("pom_tmp.xml")) {
-            byte[] dataBuffer = new byte[1024];
+             FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
+            int bufferSize = 1024 * 1024;
+            byte[] dataBuffer = new byte[bufferSize];
             int bytesRead;
-            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+            Date startBlockTime = new Date();
+            Date finishBlockTime;
+            while ((bytesRead = in.read(dataBuffer, 0, bufferSize)) != -1) {
+                finishBlockTime = new Date();
+                long delay = calculateDelay(finishBlockTime.getTime() - startBlockTime.getTime(), bytesRead);
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
-                Thread.sleep(1000);
+                Thread.sleep(delay);
+                startBlockTime = new Date();
             }
             /* Скачать файл*/
         } catch (InterruptedException | IOException e) {
@@ -31,10 +39,24 @@ public class Wget implements Runnable {
         }
     }
 
+    private long calculateDelay(long time, long bytesRead) {
+        long expectedTimeMillis = (long) (bytesRead / (speedKbs / 1000D));
+        long result = expectedTimeMillis;
+        System.out.println("diff is " + time + "millis");
+        System.out.println("expectedTime is " + expectedTimeMillis + "millis");
+
+        if (expectedTimeMillis > time) {
+            result = expectedTimeMillis - time;
+        }
+        System.out.println(result);
+        return result;
+    }
+
     public static void main(String[] args) throws InterruptedException {
         String url = args[0];
         int speed = Integer.parseInt(args[1]);
-        Thread wget = new Thread(new Wget(url, speed));
+        String fileName = args[2];
+        Thread wget = new Thread(new Wget(url, speed, fileName));
         wget.start();
         wget.join();
     }
