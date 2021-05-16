@@ -13,7 +13,7 @@ public class ProgressBar {
                         }
                         System.out.println("Loaded.");
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Thread.currentThread().interrupt();
                     }
                 }
         );
