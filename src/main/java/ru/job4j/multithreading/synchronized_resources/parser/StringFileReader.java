@@ -25,8 +25,10 @@ public class StringFileReader {
         try (FileReader fileReader = new FileReader(file)) {
             char[] buffer = new char[1024];
             StringBuilder builder = new StringBuilder();
-            while (fileReader.read(buffer) > 0) {
+            int counter;
+            while ((counter = fileReader.read(buffer)) > 0) {
                 CharBuffer.wrap(buffer).chars()
+                        .limit(counter)
                         .filter(predicate)
                         .forEach(builder::append);
             }
