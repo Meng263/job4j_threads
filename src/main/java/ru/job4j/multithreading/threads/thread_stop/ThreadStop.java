@@ -1,4 +1,4 @@
-package ru.job4j.multithreading.thread_stop;
+package ru.job4j.multithreading.threads.thread_stop;
 
 public class ThreadStop {
     public static void main(String[] args) throws InterruptedException {

@@ -1,4 +1,4 @@
-package ru.job4j.multithreading.thread_interrupt;
+package ru.job4j.multithreading.threads.thread_interrupt;
 
 import java.time.Duration;
 import java.util.List;

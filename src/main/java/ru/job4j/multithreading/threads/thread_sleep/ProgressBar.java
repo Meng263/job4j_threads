@@ -1,4 +1,4 @@
-package ru.job4j.multithreading.thread_sleep;
+package ru.job4j.multithreading.threads.thread_sleep;
 
 import java.time.Duration;
 
