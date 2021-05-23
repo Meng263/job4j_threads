@@ -3,6 +3,7 @@ package ru.job4j.multithreading.synchronized_resources.single_lock_list;
 import net.jcip.annotations.ThreadSafe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,6 +12,8 @@ public class SingleLockList<T> implements Iterable<T> {
     private final List<T> list;
 
     public SingleLockList(List<T> list) {
+        Collections.synchronizedList(list).iterator();
+
         this.list = list;
     }
 
@@ -28,6 +31,6 @@ public class SingleLockList<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return list.stream().iterator();
+        return List.copyOf(list).iterator();
     }
 }
