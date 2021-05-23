@@ -3,35 +3,34 @@ package ru.job4j.multithreading.synchronized_resources.user_storage;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @ThreadSafe
 public class UserStorage {
     @GuardedBy("this")
-    private final List<User> users = new ArrayList<>();
+    private final Map<Integer, User> users = new HashMap<>();
 
     public synchronized boolean add(User user) {
-        return users.add(user);
+        if (users.get(user.getId()) != null) return false;
+
+        return users.put(user.getId(), user) == null;
     }
 
     public synchronized boolean update(User user) {
-        User userFond = users.stream().filter(elem -> elem.getId() == user.getId())
-                .findFirst().orElseThrow();
+        if (users.get(user.getId()) == null) return false;
 
-        users.remove(userFond);
-        return users.add(user);
+        return users.put(user.getId(), user) != null;
     }
 
     public synchronized boolean delete(User user) {
-        return users.remove(user);
+        return users.remove(user.getId()) != null;
     }
 
     public synchronized void transfer(int fromId, int toId, int amount) {
-        User userFrom = users.stream().filter(user -> user.getId() == fromId)
-                .findFirst().orElseThrow();
-        User userTo = users.stream().filter(user -> user.getId() == toId)
-                .findFirst().orElseThrow();
+        User userFrom = users.get(fromId);
+        User userTo = users.get(toId);
+        if (userFrom == null || userTo == null) throw new IllegalStateException("userFrom and userTo should not be null!");
 
         int amountFrom = userFrom.getAmount();
 
@@ -43,5 +42,4 @@ public class UserStorage {
         userFrom.setAmount(userFromWithoutDiff);
         userTo.setAmount(userTo.getAmount() + amount);
     }
-
 }
