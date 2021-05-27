@@ -34,12 +34,12 @@ public class SimpleBlockingQueue<T> {
     public T poll() {
         T value;
         synchronized (this) {
-            while (queue.isEmpty()) {
-                try {
+            try {
+                while (queue.isEmpty()) {
                     this.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
                 }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
             value = queue.poll();
             this.notify();
