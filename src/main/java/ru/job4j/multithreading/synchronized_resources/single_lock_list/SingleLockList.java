@@ -28,6 +28,6 @@ public class SingleLockList<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return list.stream().iterator();
+        return List.copyOf(list).iterator();
     }
 }
