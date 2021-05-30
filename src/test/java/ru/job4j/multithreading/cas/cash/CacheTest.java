@@ -48,4 +48,12 @@ class CacheTest {
         assertEquals(1, extractedUpdated.getVersion());
     }
 
+    @Test
+    public void whenUpdateNotPresentElementThanShouldReturnFalse() {
+        Cache cache = new Cache();
+        bases.forEach(cache::add);
+        Base elemForUpdate = new Base(10, "Tenth");
+        assertFalse(cache.update(elemForUpdate));
+    }
+
 }
