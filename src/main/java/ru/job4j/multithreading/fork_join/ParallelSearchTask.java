@@ -34,11 +34,7 @@ public class ParallelSearchTask<T> extends RecursiveTask<Integer> {
 
         Integer rightJoin = rightTask.join();
         Integer leftJoint = leftTask.join();
-        if (rightJoin != -1) {
-            result = rightJoin;
-        } else {
-            result = leftJoint;
-        }
-        return result;
+
+        return Math.max(leftJoint, rightJoin);
     }
 }

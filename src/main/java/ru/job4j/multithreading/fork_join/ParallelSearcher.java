@@ -20,6 +20,7 @@ public class ParallelSearcher<T> {
         for (int i = 0; i < array.length; i++) {
             if (predicate.test(array[i])) {
                 result = i;
+                break;
             }
         }
         return result;
