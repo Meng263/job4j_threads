@@ -27,7 +27,7 @@ public class SimpleBlockingQueue<T> {
                 }
             }
             queue.offer(value);
-            this.notify();
+            this.notifyAll();
         }
     }
 
@@ -42,7 +42,7 @@ public class SimpleBlockingQueue<T> {
                 Thread.currentThread().interrupt();
             }
             value = queue.poll();
-            this.notify();
+            this.notifyAll();
         }
         return value;
     }
